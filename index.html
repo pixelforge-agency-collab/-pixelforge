@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="PixelForge — E-Commerce Web Design & Development Agency. We build Shopify, WooCommerce, and custom stores that convert."/>
+<title>PixelForge — E-Commerce Web Agency</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink: #0A0A0F;
+  --paper: #F5F2EC;
+  --accent: #FF4D1C;
+  --accent2: #FFD166;
+  --muted: #7A7770;
+  --card: #EFECE4;
+  --border: #D8D4CB;
+  --dark2: #13131A;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 16px; overflow-x: hidden; cursor: none; }
+
+/* CURSOR */
+.cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: multiply; transition: transform .12s; }
+.cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all .18s ease; mix-blend-mode: multiply; }
+@media (hover: none) { .cursor, .cursor-ring { display: none; } body { cursor: auto; } }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; padding: 22px 52px; display: flex; justify-content: space-between; align-items: center; transition: background .3s, box-shadow .3s; }
+nav.scrolled { background: rgba(245,242,236,0.95); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--border); }
+.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; text-decoration: none; color: var(--ink); }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 14px; font-weight: 500; text-decoration: none; color: var(--ink); letter-spacing: .02em; transition: color .2s; }
+.nav-links a:hover { color: var(--accent); }
+.nav-cta { background: var(--ink) !important; color: var(--paper) !important; padding: 10px 22px; border-radius: 100px; font-size: 13px !important; transition: background .2s !important; }
+.nav-cta:hover { background: var(--accent) !important; color: white !important; }
+.mob-hamburger { display: none; background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 18px; cursor: none; }
+
+/* MOBILE MENU */
+.mob-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1); }
+.mob-overlay.open { transform: translateX(0); }
+.mob-close { position: absolute; top: 28px; right: 28px; background: none; border: none; color: white; font-size: 22px; cursor: none; }
+.mob-links { list-style: none; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+.mob-links a { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: rgba(255,255,255,0.7); text-decoration: none; transition: color .2s; }
+.mob-links a:hover { color: white; }
+.mob-cta { background: var(--accent) !important; color: white !important; padding: 14px 36px !important; border-radius: 100px !important; font-size: 18px !important; }
+
+/* HERO */
+.hero { min-height: 100vh; padding: 140px 52px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .18; }
+.blob1 { width: 500px; height: 500px; background: var(--accent); top: -100px; right: -100px; animation: drift 8s ease-in-out infinite; }
+.blob2 { width: 300px; height: 300px; background: var(--accent2); bottom: 0; left: 100px; animation: drift 11s ease-in-out infinite reverse; }
+@keyframes drift { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(30px,-20px) scale(1.05);} }
+.hero-content { position: relative; z-index: 1; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+.hero-eyebrow::before { content:''; display:block; width:28px; height:2px; background:var(--accent); }
+.hero-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(44px, 5.5vw, 84px); line-height: .95; letter-spacing: -3px; margin-bottom: 28px; }
+.hero-title em { font-style: normal; color: var(--accent); }
+.hero-title .outline { -webkit-text-stroke: 2px var(--ink); color: transparent; }
+.hero-desc { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 460px; margin-bottom: 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; margin-bottom: 28px; }
+.btn-primary { background: var(--ink); color: var(--paper); padding: 15px 34px; border-radius: 100px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all .25s; border: none; cursor: none; display: inline-block; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,77,28,.3); }
+.btn-ghost { color: var(--ink); font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: gap .2s, color .2s; }
+.btn-ghost:hover { gap: 14px; color: var(--accent); }
+.hero-trust { display: flex; align-items: center; gap: 10px; }
+.trust-stars { color: var(--accent2); font-size: 16px; letter-spacing: 2px; }
+.trust-text { font-size: 13px; color: var(--muted); }
+.hero-visual { position: relative; z-index: 1; }
+.hero-card { background: var(--ink); border-radius: 22px; padding: 34px; position: relative; overflow: hidden; }
+.hero-card-glow { position: absolute; width: 200px; height: 200px; background: var(--accent); border-radius: 50%; filter: blur(60px); opacity: .3; top: -40px; right: -40px; }
+.hero-card-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+.hero-card-metric { font-family: 'Syne', sans-serif; font-size: 60px; font-weight: 800; color: white; line-height: 1; margin-bottom: 4px; }
+.hero-card-metric span { color: var(--accent); }
+.hero-card-sub { color: rgba(255,255,255,.5); font-size: 14px; margin-bottom: 28px; }
+.hero-mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-card { background: rgba(255,255,255,.07); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,.08); }
+.mini-card-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: white; }
+.mini-card-lbl { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; }
+.hero-floating-badge { background: white; border-radius: 100px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; box-shadow: 0 8px 30px rgba(0,0,0,.12); margin-top: 14px; }
+.hero-scroll { position: absolute; bottom: 36px; left: 52px; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; animation: bounceY 2s ease-in-out infinite; }
+@keyframes bounceY { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+/* MARQUEE */
+.marquee-strip { background: var(--ink); padding: 16px 0; overflow: hidden; }
+.marquee-track { display: flex; white-space: nowrap; animation: marquee 22s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .1em; padding: 0 36px; display: inline-flex; align-items: center; gap: 18px; }
+.marquee-item::after { content:'★'; color: var(--accent); font-size: 9px; }
+@keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+/* STATS */
+.stats-bar { background: var(--accent); padding: 30px 52px; display: grid; grid-template-columns: repeat(4,1fr); }
+.stat { text-align: center; padding: 0 16px; border-right: 1px solid rgba(255,255,255,.25); }
+.stat:last-child { border: none; }
+.stat-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 38px; color: white; line-height: 1; }
+.stat-lbl { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 4px; }
+
+/* SECTIONS */
+section { padding: 100px 52px; }
+.section-tag { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section-tag::before { content:''; display:block; width:18px; height:1.5px; background:var(--accent); }
+.section-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(34px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -2px; margin-bottom: 18px; }
+.section-sub { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 500px; font-weight: 300; }
+
+/* SERVICES */
+.services { background: var(--paper); }
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 56px; background: var(--border); border-radius: 20px; overflow: hidden; }
+.service-card { background: var(--card); padding: 42px 34px; transition: background .25s; position: relative; overflow: hidden; }
+.service-card:hover { background: var(--ink); }
+.service-card:hover .service-title, .service-card:hover .service-link { color: white; }
+.service-card:hover .service-desc { color: rgba(255,255,255,.5); }
+.service-card:hover .service-icon { background: var(--accent); }
+.service-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 66px; color: var(--border); position: absolute; top: -10px; right: 18px; line-height: 1; transition: color .25s; }
+.service-card:hover .service-num { color: rgba(255,255,255,.07); }
+.service-icon { width: 50px; height: 50px; background: var(--paper); border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 22px; transition: background .25s; }
+.service-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 10px; transition: color .25s; }
+.service-desc { font-size: 14px; color: var(--muted); line-height: 1.65; transition: color .25s; }
+.service-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--accent); margin-top: 18px; text-decoration: none; transition: gap .2s, color .25s; }
+.service-link:hover { gap: 10px; }
+
+/* PROCESS */
+.process { background: var(--ink); }
+.process-steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; margin-top: 56px; }
+.process-step { padding: 34px 22px; border-left: 1px solid rgba(255,255,255,.08); position: relative; transition: background .25s; }
+.process-step:first-child { border-left: none; }
+.process-step:hover { background: rgba(255,255,255,.04); }
+.step-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 38px; color: rgba(255,255,255,.07); margin-bottom: 18px; }
+.step-icon { font-size: 26px; margin-bottom: 14px; }
+.step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: white; margin-bottom: 8px; transition: color .25s; }
+.process-step:hover .step-title { color: var(--accent2); }
+.step-desc { font-size: 13px; color: rgba(255,255,255,.4); line-height: 1.6; }
+
+/* WORK */
+.work { background: var(--paper); }
+.work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 56px; }
+.work-card { border-radius: 16px; overflow: hidden; background: var(--card); border: 1px solid var(--border); transition: transform .3s, box-shadow .3s; }
+.work-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.12); }
+.work-card.wide { grid-column: span 2; }
+.work-card.dark { background: var(--ink); }
+.work-thumb { height: 260px; display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; overflow: hidden; }
+.work-card.wide .work-thumb { height: 340px; }
+.wt1 { background: linear-gradient(135deg, #FF4D1C18, #FF4D1C38); }
+.wt2 { background: linear-gradient(135deg, #FFD16618, #FFD16638); }
+.wt3 { background: linear-gradient(135deg, #0A0A0F, #1a1a2e); }
+.work-info { padding: 26px; }
+.work-tag { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.work-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 6px; }
+.work-meta { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.work-cta { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: gap .2s; }
+.work-cta:hover { gap: 10px; }
+
+/* PRICING */
+.pricing { background: var(--card); }
+.pricing-toggle { display: flex; gap: 4px; background: var(--border); padding: 4px; border-radius: 100px; width: fit-content; margin: 36px 0 48px; }
+.toggle-btn { padding: 9px 24px; border-radius: 100px; border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: none; transition: all .2s; color: var(--muted); }
+.toggle-btn.active { background: var(--ink); color: white; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+.price-card { background: var(--paper); border: 1px solid var(--border); border-radius: 20px; padding: 38px 30px; position: relative; transition: transform .3s; }
+.price-card:hover { transform: translateY(-4px); }
+.price-card.featured { background: var(--ink); border-color: var(--ink); }
+.price-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 16px; border-radius: 100px; white-space: nowrap; }
+.price-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 19px; margin-bottom: 6px; }
+.price-card.featured .price-name { color: white; }
+.price-amount { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 50px; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; transition: all .3s; }
+.price-card.featured .price-amount { color: white; }
+.price-period { font-size: 13px; color: var(--muted); margin-bottom: 26px; }
+.price-card.featured .price-period { color: rgba(255,255,255,.4); }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 32px; }
+.price-features li { font-size: 14px; color: var(--muted); display: flex; align-items: flex-start; gap: 9px; }
+.price-card.featured .price-features li { color: rgba(255,255,255,.6); }
+.price-features li::before { content:'✓'; color: var(--accent); font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+.price-btn { width: 100%; padding: 13px; border-radius: 100px; border: 1.5px solid var(--ink); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: none; transition: all .2s; }
+.price-btn:hover { background: var(--ink); color: var(--paper); }
+.price-card.featured .price-btn { background: var(--accent); border-color: var(--accent); color: white; }
+.price-card.featured .price-btn:hover { background: #e03e10; }
+
+/* TESTIMONIALS */
+.testimonials { background: var(--paper); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 54px; }
+.testi-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; transition: transform .25s; }
+.testi-card:hover { transform: translateY(-4px); }
+.testi-stars { color: var(--accent2); font-size: 13px; margin-bottom: 14px; letter-spacing: 2px; }
+.testi-text { font-size: 14px; line-height: 1.7; color: var(--ink); margin-bottom: 22px; font-weight: 300; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 11px; }
+.testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.testi-name { font-weight: 600; font-size: 14px; }
+.testi-role { font-size: 12px; color: var(--muted); }
+
+/* FAQ */
+.faq { background: var(--card); }
+.faq-list { margin-top: 50px; display: flex; flex-direction: column; gap: 2px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+.faq-item { background: var(--paper); }
+.faq-q { width: 100%; background: none; border: none; padding: 22px 26px; text-align: left; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: none; display: flex; justify-content: space-between; align-items: center; transition: background .2s; }
+.faq-q:hover { background: var(--card); }
+.faq-q span { font-size: 20px; color: var(--accent); transition: transform .2s; font-weight: 300; flex-shrink: 0; }
+.faq-q.open span { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; padding: 0 26px; font-size: 14px; color: var(--muted); line-height: 1.7; transition: max-height .35s ease, padding .35s ease; }
+.faq-a.open { max-height: 160px; padding: 0 26px 20px; }
+
+/* CONTACT */
+.contact { background: var(--ink); }
+.contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-perks { margin-top: 36px; display: flex; flex-direction: column; gap: 18px; }
+.perk { display: flex; align-items: flex-start; gap: 13px; }
+.perk-icon { width: 38px; height: 38px; background: rgba(255,255,255,.06); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.perk-text { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.5; }
+.perk-text strong { color: white; display: block; font-size: 15px; margin-bottom: 1px; }
+.contact-form { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+.form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 13px 15px; color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color .2s; resize: none; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,.22); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+.form-group select option { background: #1a1a2e; }
+.form-submit { background: var(--accent); color: white; border: none; padding: 15px 34px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: none; transition: all .25s; display: flex; align-items: center; gap: 10px; justify-content: center; }
+.form-submit:hover { background: #e03e10; transform: translateY(-2px); }
+.form-success { display: none; background: rgba(255,77,28,.15); border: 1px solid var(--accent); border-radius: 12px; padding: 18px; text-align: center; color: var(--accent2); font-weight: 500; font-size: 14px; line-height: 1.6; }
+
+/* FOOTER */
+footer { background: #060608; }
+.footer-top { padding: 60px 52px 40px; display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: white; margin-bottom: 12px; }
+.footer-logo span { color: var(--accent); }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,.35); line-height: 1.6; max-width: 280px; margin-bottom: 20px; }
+.footer-socials { display: flex; gap: 12px; }
+.footer-socials a { width: 34px; height: 34px; background: rgba(255,255,255,.07); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.5); font-size: 12px; font-weight: 700; text-decoration: none; transition: background .2s, color .2s; }
+.footer-socials a:hover { background: var(--accent); color: white; }
+.footer-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 30px; }
+.footer-col { display: flex; flex-direction: column; gap: 10px; }
+.footer-col-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: white; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.footer-col a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; transition: color .2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { padding: 20px 52px; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.25); }
+.footer-legal { display: flex; gap: 20px; }
+.footer-legal a { font-size: 12px; color: rgba(255,255,255,.25); text-decoration: none; transition: color .2s; }
+.footer-legal a:hover { color: rgba(255,255,255,.6); }
+
+/* CHAT */
+.chat-bubble { position: fixed; bottom: 28px; right: 28px; width: 54px; height: 54px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: none; box-shadow: 0 8px 24px rgba(255,77,28,.4); z-index: 400; transition: transform .2s; animation: pulse 2.5s infinite; }
+.chat-bubble:hover { transform: scale(1.1); }
+@keyframes pulse { 0%,100%{box-shadow:0 8px 24px rgba(255,77,28,.4);} 50%{box-shadow:0 8px 36px rgba(255,77,28,.7);} }
+.chat-box { position: fixed; bottom: 94px; right: 28px; width: 320px; background: white; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.18); z-index: 400; overflow: hidden; transform: scale(0) translateY(20px); transform-origin: bottom right; transition: transform .25s cubic-bezier(.4,0,.2,1); }
+.chat-box.open { transform: scale(1) translateY(0); }
+.chat-header { background: var(--ink); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+.chat-header span { font-size: 14px; font-weight: 600; color: white; }
+.chat-header button { background: none; border: none; color: rgba(255,255,255,.5); font-size: 16px; cursor: none; }
+.chat-body { padding: 14px; max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.chat-msg { font-size: 13px; line-height: 1.5; padding: 9px 13px; border-radius: 12px; max-width: 85%; }
+.chat-msg.bot { background: var(--card); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 3px; }
+.chat-msg.user { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
+.chat-input-row { display: flex; gap: 0; border-top: 1px solid var(--border); }
+.chat-input-row input { flex: 1; border: none; padding: 13px 15px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+.chat-input-row button { background: var(--accent); border: none; color: white; padding: 0 18px; font-size: 18px; cursor: none; transition: background .2s; }
+.chat-input-row button:hover { background: #e03e10; }
+
+/* FADE IN */
+.fade-in { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  nav { padding: 18px 28px; }
+  .nav-links { gap: 20px; }
+  .hero { padding: 130px 28px 70px; gap: 40px; }
+  section { padding: 80px 28px; }
+  .stats-bar { padding: 24px 28px; }
+  .footer-top { padding: 50px 28px 36px; }
+  .footer-bottom { padding: 18px 28px; }
+}
+@media (max-width: 860px) {
+  .nav-links { display: none; }
+  .mob-hamburger { display: block; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .hero-scroll { display: none; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .work-grid { grid-template-columns: 1fr; }
+  .work-card.wide { grid-column: span 1; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr 1fr; }
+  .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  .footer-cols { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .footer-cols { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mob-overlay" id="mobOverlay">
+  <button class="mob-close" id="mobClose">✕</button>
+  <ul class="mob-links">
+    <li><a href="#services" onclick="closeMob()">Services</a></li>
+    <li><a href="#work" onclick="closeMob()">Work</a></li>
+    <li><a href="#pricing" onclick="closeMob()">Pricing</a></li>
+    <li><a href="#testimonials" onclick="closeMob()">Clients</a></li>
+    <li><a href="#contact" onclick="closeMob()" class="mob-cta">Get a Free Quote →</a></li>
+  </ul>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">PIXEL<span>FORGE</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Clients</a></li>
+    <li><a href="#contact">Blog</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+  <button class="mob-hamburger" id="mobOpen">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-blob blob1"></div>
+    <div class="hero-blob blob2"></div>
+  </div>
+  <div class="hero-content fade-in">
+    <div class="hero-eyebrow">E-Commerce Web Agency</div>
+    <h1 class="hero-title">
+      We Build<br/>
+      Stores That<br/>
+      <em>Actually</em><br/>
+      <span class="outline">Convert</span>
+    </h1>
+    <p class="hero-desc">High-performance e-commerce websites designed to turn visitors into loyal customers. Custom-built, blazing fast, and built to scale your revenue.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start a Project</a>
+      <a href="#work" class="btn-ghost">See Our Work →</a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-stars">★★★★★</span>
+      <span class="trust-text">Rated 4.9/5 by 80+ e-commerce brands</span>
+    </div>
+  </div>
+  <div class="hero-visual fade-in" style="transition-delay:.2s">
+    <div class="hero-card">
+      <div class="hero-card-glow"></div>
+      <div class="hero-card-label">Average Client Result</div>
+      <div class="hero-card-metric">+<span id="convCounter">0</span>%</div>
+      <div class="hero-card-sub">Conversion rate increase</div>
+      <div class="hero-mini-cards">
+        <div class="mini-card">
+          <div class="mini-card-val"><span id="projCounter">0</span>+</div>
+          <div class="mini-card-lbl">Projects Delivered</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-val"><span id="retCounter">0</span>%</div>
+          <div class="mini-card-lbl">Client Retention</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-val">1.4s</div>
+          <div class="mini-card-lbl">Avg Load Time</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-val" style="color:var(--accent2)">5★</div>
+          <div class="mini-card-lbl">Client Rating</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-floating-badge">
+      <span>🚀</span>
+      <span>New project? We can start this week.</span>
+    </div>
+  </div>
+  <div class="hero-scroll">↓ Scroll to explore</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marquee"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat fade-in"><div class="stat-val">120+</div><div class="stat-lbl">Stores Launched</div></div>
+  <div class="stat fade-in" style="transition-delay:.1s"><div class="stat-val">$42M</div><div class="stat-lbl">Revenue Generated</div></div>
+  <div class="stat fade-in" style="transition-delay:.2s"><div class="stat-val">98%</div><div class="stat-lbl">On-Time Delivery</div></div>
+  <div class="stat fade-in" style="transition-delay:.3s"><div class="stat-val">4.9★</div><div class="stat-lbl">Average Rating</div></div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-tag fade-in">What We Do</div>
+  <h2 class="section-title fade-in">Services Built for<br/>E-Commerce Growth</h2>
+  <p class="section-sub fade-in">Every service is designed with one goal: more revenue for your brand.</p>
+  <div class="services-grid">
+    <div class="service-card fade-in">
+      <div class="service-num">01</div>
+      <div class="service-icon">🛍️</div>
+      <div class="service-title">Shopify Development</div>
+      <div class="service-desc">Custom Shopify themes, app integrations, and store optimization tailored to your brand's unique needs and customer journey.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+    <div class="service-card fade-in" style="transition-delay:.08s">
+      <div class="service-num">02</div>
+      <div class="service-icon">⚡</div>
+      <div class="service-title">Performance Optimization</div>
+      <div class="service-desc">Sub-2-second load times. PageSpeed 90+. Every millisecond counts — we make your store lightning fast to reduce bounce and boost conversions.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+    <div class="service-card fade-in" style="transition-delay:.16s">
+      <div class="service-num">03</div>
+      <div class="service-icon">🎨</div>
+      <div class="service-title">UI/UX Design</div>
+      <div class="service-desc">Conversion-focused design systems. From wireframes to high-fidelity mockups that look stunning and guide users to checkout.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+    <div class="service-card fade-in" style="transition-delay:.04s">
+      <div class="service-num">04</div>
+      <div class="service-icon">🔌</div>
+      <div class="service-title">Custom Integrations</div>
+      <div class="service-desc">Connect your store to any third-party tool — CRM, ERP, email platforms, payment gateways, shipping APIs, and more.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+    <div class="service-card fade-in" style="transition-delay:.12s">
+      <div class="service-num">05</div>
+      <div class="service-icon">📈</div>
+      <div class="service-title">CRO & Analytics</div>
+      <div class="service-desc">A/B testing, heatmaps, funnel analysis, and GA4 setup. We don't just build your store — we help you grow it.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+    <div class="service-card fade-in" style="transition-delay:.20s">
+      <div class="service-num">06</div>
+      <div class="service-icon">🔒</div>
+      <div class="service-title">Maintenance & Support</div>
+      <div class="service-desc">Ongoing retainer plans for updates, security patches, new features, and priority support whenever you need it.</div>
+      <a href="#services" class="service-link">Learn more →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-tag fade-in" style="color:rgba(255,255,255,0.4)">How We Work</div>
+  <h2 class="section-title fade-in" style="color:white">From Idea to Launch<br/>in 5 Proven Steps</h2>
+  <div class="process-steps">
+    <div class="process-step fade-in">
+      <div class="step-num">01</div><div class="step-icon">🔍</div>
+      <div class="step-title">Discovery</div>
+      <div class="step-desc">Deep-dive into your brand, goals, competitors, and customer personas to define what success looks like.</div>
+    </div>
+    <div class="process-step fade-in" style="transition-delay:.1s">
+      <div class="step-num">02</div><div class="step-icon">✏️</div>
+      <div class="step-title">Strategy & Design</div>
+      <div class="step-desc">Wireframes, mood boards, and high-fidelity mockups. You approve every pixel before we write code.</div>
+    </div>
+    <div class="process-step fade-in" style="transition-delay:.2s">
+      <div class="step-num">03</div><div class="step-icon">💻</div>
+      <div class="step-title">Development</div>
+      <div class="step-desc">Clean, performant code built for speed and scalability. Weekly demos keep you always in the loop.</div>
+    </div>
+    <div class="process-step fade-in" style="transition-delay:.3s">
+      <div class="step-num">04</div><div class="step-icon">🚀</div>
+      <div class="step-title">QA & Launch</div>
+      <div class="step-desc">Rigorous testing across devices and browsers before a smooth, coordinated launch day.</div>
+    </div>
+    <div class="process-step fade-in" style="transition-delay:.4s">
+      <div class="step-num">05</div><div class="step-icon">📊</div>
+      <div class="step-title">Growth Support</div>
+      <div class="step-desc">Post-launch monitoring, iteration based on real data, and ongoing support to keep scaling.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="section-tag fade-in">Portfolio</div>
+  <h2 class="section-title fade-in">Work We're<br/>Proud Of</h2>
+  <p class="section-sub fade-in">Real stores. Real results. Every project ships with measurable impact.</p>
+  <div class="work-grid">
+    <div class="work-card wide fade-in">
+      <div class="work-thumb wt1"><span>🛒</span></div>
+      <div class="work-info">
+        <div class="work-tag">Shopify · Fashion</div>
+        <div class="work-title">LuxThread — Premium Fashion Store</div>
+        <div class="work-meta">Custom Shopify build · +187% conversion uplift · 1.4s load time</div>
+        <a href="#work" class="work-cta">View Case Study →</a>
+      </div>
+    </div>
+    <div class="work-card fade-in" style="transition-delay:.1s">
+      <div class="work-thumb wt2"><span>🌿</span></div>
+      <div class="work-info">
+        <div class="work-tag">WooCommerce · Health</div>
+        <div class="work-title">Verdura Wellness</div>
+        <div class="work-meta">Subscription model · 3x revenue in 6 months</div>
+        <a href="#work" class="work-cta">View Case Study →</a>
+      </div>
+    </div>
+    <div class="work-card dark fade-in" style="transition-delay:.2s">
+      <div class="work-thumb wt3"><span>⌚</span></div>
+      <div class="work-info">
+        <div class="work-tag" style="color:rgba(255,255,255,0.4)">Custom Stack · Luxury</div>
+        <div class="work-title" style="color:white">Meridian Watches</div>
+        <div class="work-meta" style="color:rgba(255,255,255,0.5)">Headless commerce · Bespoke configurator · Global launch</div>
+        <a href="#work" class="work-cta">View Case Study →</a>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:44px">
+    <a href="#work" class="btn-primary">View All Projects →</a>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-tag fade-in">Transparent Pricing</div>
+  <h2 class="section-title fade-in">Simple Packages,<br/>Clear Value</h2>
+  <p class="section-sub fade-in">No hidden fees. No surprise invoices. Pick the package that fits your stage.</p>
+  <div class="pricing-toggle fade-in">
+    <button class="toggle-btn active" onclick="setFreq('project',this)">One-Time Project</button>
+    <button class="toggle-btn" onclick="setFreq('monthly',this)">Monthly Retainer</button>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card fade-in">
+      <div class="price-name">Starter</div>
+      <div class="price-amount" id="p1">$2,500</div>
+      <div class="price-period" id="p1s">one-time project</div>
+      <ul class="price-features">
+        <li>Up to 5 pages</li>
+        <li>Responsive mobile design</li>
+        <li>Basic SEO setup</li>
+        <li>Contact form & analytics</li>
+        <li>14-day post-launch support</li>
+      </ul>
+      <button class="price-btn" onclick="scrollContact('Starter')">Get Started</button>
+    </div>
+    <div class="price-card featured fade-in" style="transition-delay:.12s">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-name">Growth</div>
+      <div class="price-amount" id="p2">$6,500</div>
+      <div class="price-period" id="p2s">one-time project</div>
+      <ul class="price-features">
+        <li>Up to 15 pages</li>
+        <li>Custom UI/UX design</li>
+        <li>Shopify or WooCommerce</li>
+        <li>Payment gateway integration</li>
+        <li>GA4 + conversion tracking</li>
+        <li>30-day support included</li>
+      </ul>
+      <button class="price-btn" onclick="scrollContact('Growth')">Get Started</button>
+    </div>
+    <div class="price-card fade-in" style="transition-delay:.24s">
+      <div class="price-name">Premium</div>
+      <div class="price-amount" id="p3">$14k+</div>
+      <div class="price-period" id="p3s">custom scope</div>
+      <ul class="price-features">
+        <li>Unlimited pages & products</li>
+        <li>Custom integrations & APIs</li>
+        <li>Headless / custom stack</li>
+        <li>CRO strategy included</li>
+        <li>Dedicated project manager</li>
+        <li>60-day priority support</li>
+      </ul>
+      <button class="price-btn" onclick="scrollContact('Premium')">Let\'s Talk</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-tag fade-in">Client Love</div>
+  <h2 class="section-title fade-in">Don't Take<br/>Our Word For It</h2>
+  <div class="testi-grid">
+    <div class="testi-card fade-in">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"PixelForge completely transformed our online store. Conversions jumped 140% in the first month. Worth every penny and more."</div>
+      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Sarah Chen</div><div class="testi-role">Founder, LuxThread Fashion</div></div></div>
+    </div>
+    <div class="testi-card fade-in" style="transition-delay:.1s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"The team was incredibly communicative. They delivered ahead of schedule and the site loads faster than anything I've ever seen."</div>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Marcus Williams</div><div class="testi-role">CEO, Verdura Wellness</div></div></div>
+    </div>
+    <div class="testi-card fade-in" style="transition-delay:.2s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"I've worked with three other agencies. PixelForge is on another level. They think like business owners, not just developers."</div>
+      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Priya Kapoor</div><div class="testi-role">Co-Founder, Meridian Watches</div></div></div>
+    </div>
+    <div class="testi-card fade-in" style="transition-delay:.05s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"From discovery to launch in 4 weeks. Incredible pace without sacrificing quality. Our bounce rate dropped 35% on day one."</div>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">James Okafor</div><div class="testi-role">CMO, Stride Athletics</div></div></div>
+    </div>
+    <div class="testi-card fade-in" style="transition-delay:.15s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"The attention to detail is unreal. Every micro-interaction, every animation, feels intentional. Our customers comment on it daily."</div>
+      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Anya Patel</div><div class="testi-role">Founder, Lumé Skincare</div></div></div>
+    </div>
+    <div class="testi-card fade-in" style="transition-delay:.25s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Best investment we made in 2025. ROI was 10x within 90 days. Their CRO advice alone was worth the entire project fee."</div>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Tariq Hassan</div><div class="testi-role">Director, NomadGear Co.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="section-tag fade-in">FAQ</div>
+  <h2 class="section-title fade-in">Common Questions</h2>
+  <div class="faq-list fade-in">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">How long does a typical project take? <span>+</span></button>
+      <div class="faq-a">Starter projects take 3–4 weeks. Growth packages run 5–8 weeks. Premium custom builds are 8–16 weeks depending on scope. We'll give you a precise timeline in your proposal.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Do you work with existing stores or only new builds? <span>+</span></button>
+      <div class="faq-a">Both. We handle new builds from scratch, full redesigns, platform migrations (e.g. Magento to Shopify), and also ongoing optimization for existing stores.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">What platforms do you build on? <span>+</span></button>
+      <div class="faq-a">We specialize in Shopify, WooCommerce, and custom Next.js / React builds. We'll recommend the right platform based on your scale, budget, and technical needs.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">What do payment terms look like? <span>+</span></button>
+      <div class="faq-a">We require a 50% deposit to begin, with the remaining 50% due upon launch. For larger projects we can split into milestone-based payments. We accept bank transfer, credit card, and PayPal.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Will I own everything after launch? <span>+</span></button>
+      <div class="faq-a">100%. All code, design files, accounts, and assets are fully transferred to you at launch. No lock-ins, no ongoing license fees for work we've built.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Do you offer ongoing support after launch? <span>+</span></button>
+      <div class="faq-a">Yes. Every package includes a post-launch support window. We also offer monthly retainer plans starting at $800/month for ongoing updates, feature additions, and priority support.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="section-tag fade-in" style="color:rgba(255,255,255,0.35)">Start a Project</div>
+      <h2 class="section-title fade-in" style="color:white">Ready to Build<br/>Something Great?</h2>
+      <p class="section-sub fade-in" style="color:rgba(255,255,255,0.5)">Tell us about your project. We'll get back to you within 24 hours with a clear plan and honest quote.</p>
+      <div class="contact-perks fade-in" style="transition-delay:.1s">
+        <div class="perk"><div class="perk-icon">⚡</div><div class="perk-text"><strong>Free Discovery Call</strong>30-min strategy session, no strings attached</div></div>
+        <div class="perk"><div class="perk-icon">📋</div><div class="perk-text"><strong>Detailed Proposal</strong>Custom scope, timeline & fixed price in 48 hrs</div></div>
+        <div class="perk"><div class="perk-icon">🔒</div><div class="perk-text"><strong>You Own Everything</strong>All code, accounts, and assets at launch</div></div>
+        <div class="perk"><div class="perk-icon">🚀</div><div class="perk-text"><strong>Can Start This Week</strong>Slots available — don't wait on your competition</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form fade-in" style="transition-delay:.15s">
+        <div class="form-row">
+          <div class="form-group"><label>Your Name</label><input type="text" id="fname" placeholder="Jane Smith"/></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="femail" placeholder="jane@brand.com"/></div>
+        </div>
+        <div class="form-group"><label>Company / Brand</label><input type="text" id="fcompany" placeholder="Your E-Commerce Brand"/></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project Type</label>
+            <select id="ftype">
+              <option value="">Select a service...</option>
+              <option>Shopify Development</option>
+              <option>WooCommerce Build</option>
+              <option>Custom E-Commerce</option>
+              <option>Redesign / Migration</option>
+              <option>Performance Optimization</option>
+              <option>Ongoing Support / Retainer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Budget Range</label>
+            <select id="fbudget">
+              <option value="">Select budget...</option>
+              <option>$2,000 – $5,000</option>
+              <option>$5,000 – $10,000</option>
+              <option>$10,000 – $25,000</option>
+              <option>$25,000+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Tell Us About Your Project</label><textarea rows="4" id="fmsg" placeholder="What are you building? What's your timeline? Any details help..."></textarea></div>
+        <button class="form-submit" id="submitBtn" onclick="submitForm()"><span>Send Project Brief</span><span>→</span></button>
+        <div class="form-success" id="formSuccess">🎉 Thank you! We'll be in touch within 24 hours to schedule your free discovery call.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">PIXEL<span>FORGE</span></div>
+      <p class="footer-tagline">Building e-commerce experiences that convert visitors into customers — since 2019.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="Twitter">𝕏</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">ig</a>
+        <a href="#" aria-label="Dribbble">dr</a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="#services">Shopify Development</a>
+        <a href="#services">WooCommerce</a>
+        <a href="#services">UI/UX Design</a>
+        <a href="#services">Performance</a>
+        <a href="#services">CRO & Analytics</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#contact">About Us</a>
+        <a href="#work">Portfolio</a>
+        <a href="#contact">Blog</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <a href="mailto:hello@pixelforge.agency">hello@pixelforge.agency</a>
+        <a href="tel:+15551234567">+1 (555) 123-4567</a>
+        <a href="#">Schedule a Call</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 PixelForge Agency. All rights reserved.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<!-- LIVE CHAT BUBBLE -->
+<div class="chat-bubble" id="chatBubble" onclick="toggleChat()">💬</div>
+<div class="chat-box" id="chatBox">
+  <div class="chat-header"><span>👋 Chat with us</span><button onclick="toggleChat()">✕</button></div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot">Hi! 👋 Ready to build your e-commerce store? Ask me anything.</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button onclick="sendChat()">→</button>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ─────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+if (cursor) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * .13; ry += (my - ry) * .13;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  document.querySelectorAll('a, button, .price-btn, .form-submit, .toggle-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.8)'; });
+    el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  });
+}
+
+// ── NAVBAR SCROLL ──────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── MOBILE MENU ────────────────────────────────────────────────
+const mobOverlay = document.getElementById('mobOverlay');
+document.getElementById('mobOpen')?.addEventListener('click', () => mobOverlay?.classList.add('open'));
+document.getElementById('mobClose')?.addEventListener('click', closeMob);
+function closeMob() { mobOverlay?.classList.remove('open'); }
+
+// ── MARQUEE ────────────────────────────────────────────────────
+const marqueeEl = document.getElementById('marquee');
+if (marqueeEl) {
+  const items = ['Shopify Development','WooCommerce','UI/UX Design','Performance','Custom Integrations','CRO Strategy','E-Commerce Experts','Fast Delivery','Conversion Focused','Mobile First'];
+  const full = [...items, ...items, ...items, ...items].map(t => `<span class="marquee-item">${t}</span>`).join('');
+  marqueeEl.innerHTML = full;
+}
+
+// ── COUNTER ANIMATION ──────────────────────────────────────────
+function animCount(el, target, duration) {
+  if (!el) return;
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    el.textContent = Math.floor(p * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+setTimeout(() => {
+  animCount(document.getElementById('convCounter'), 147, 2000);
+  animCount(document.getElementById('projCounter'), 120, 1800);
+  animCount(document.getElementById('retCounter'), 94, 1500);
+}, 500);
+
+// ── SCROLL FADE IN ─────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── PRICING TOGGLE ─────────────────────────────────────────────
+const retainerPrices = { p1: '$800', p1s: 'per month', p2: '$1,800', p2s: 'per month', p3: '$3,500+', p3s: 'per month' };
+const projectPrices  = { p1: '$2,500', p1s: 'one-time project', p2: '$6,500', p2s: 'one-time project', p3: '$14k+', p3s: 'custom scope' };
+function setFreq(type, btn) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const prices = type === 'monthly' ? retainerPrices : projectPrices;
+  Object.entries(prices).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '0'; setTimeout(() => { el.textContent = val; el.style.opacity = '1'; }, 180); }
+  });
+}
+
+// ── FAQ ────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!isOpen) { answer.classList.add('open'); btn.classList.add('open'); }
+}
+
+// ── CONTACT FORM ───────────────────────────────────────────────
+function scrollContact(pkg) {
+  const el = document.getElementById('contact');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    const sel = document.getElementById('ftype');
+    if (sel && pkg) {
+      const map = { Starter: 'Shopify Development', Growth: 'Shopify Development', Premium: 'Custom E-Commerce' };
+      sel.value = map[pkg] || '';
+    }
+  }, 700);
+}
+
+function submitForm() {
+  const name = document.getElementById('fname')?.value.trim();
+  const email = document.getElementById('femail')?.value.trim();
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  const btn = document.getElementById('submitBtn');
+  const success = document.getElementById('formSuccess');
+  if (btn) btn.style.display = 'none';
+  if (success) success.style.display = 'block';
+}
+
+// ── LIVE CHAT ──────────────────────────────────────────────────
+const chatBox = document.getElementById('chatBox');
+function toggleChat() { chatBox?.classList.toggle('open'); }
+
+const chatResponses = {
+  default: "Thanks for reaching out! For a quick response, fill in the contact form below or email us at hello@pixelforge.agency 🚀",
+  price: "Our packages start at $2,500 for a Starter site. Growth is $6,500 and Premium starts at $14k. We also offer monthly retainers from $800/mo!",
+  time: "Typical timelines: Starter (3–4 weeks), Growth (5–8 weeks), Premium (8–16 weeks). We can sometimes fast-track — just ask!",
+  shopify: "Shopify is our specialty! Custom themes, app integrations, migration, and optimization — we handle it all.",
+  hello: "Hey! 👋 Great to hear from you. How can we help with your e-commerce store today?",
+  portfolio: "Check out our portfolio page to see case studies from LuxThread, Verdura Wellness, and Meridian Watches — all with real results!",
+};
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const body = document.getElementById('chatBody');
+  if (!input || !body) return;
+  const msg = input.value.trim();
+  if (!msg) return;
+  body.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
+  const lower = msg.toLowerCase();
+  let reply = chatResponses.default;
+  if (/hi|hello|hey/.test(lower)) reply = chatResponses.hello;
+  else if (/price|cost|how much|pricing/.test(lower)) reply = chatResponses.price;
+  else if (/time|long|week|fast|quick/.test(lower)) reply = chatResponses.time;
+  else if (/shopify/.test(lower)) reply = chatResponses.shopify;
+  else if (/portfolio|work|example|case/.test(lower)) reply = chatResponses.portfolio;
+  setTimeout(() => {
+    body.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+    body.scrollTop = body.scrollHeight;
+  }, 700);
+}
+
+</script>
+</body>
+</html>
